@@ -1,0 +1,11 @@
+{
+  "name": "Calma",
+  "description": "A quieter Spotify: artwork-aware colors, floating glass controls and subtle, responsive motion.",
+  "preview": "previews/album.png",
+  "usercss": "user.css",
+  "schemes": "color.ini",
+  "include": ["https://ell1zv4.github.io/calma-spicetify/theme.js"],
+  "readme": "README.md",
+  "authors": [{ "name": "ell1zv4", "url": "https://github.com/ell1zv4" }],
+  "tags": ["dark", "minimal", "glass", "dynamic"]
+}

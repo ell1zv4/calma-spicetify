@@ -1,0 +1,1218 @@
+/* Calma: local styling for Spotify's native controls. */
+/* Calma 1.0.0 · MIT · https://github.com/ell1zv4/calma-spicetify */
+:root {
+  color-scheme: dark;
+  --calma-color-ease: var(--calma-motion-ease);
+  --calma-motion-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --calma-open-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --calma-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 16px 40px rgba(0, 0, 0, 0.3);
+  --calma-control-surface: color-mix(in srgb, color-mix(in srgb, var(--spice-main) 62%, #06080b) 80%, transparent);
+  --calma-control-sheen: linear-gradient(155deg, rgba(255, 255, 255, 0.08), transparent 45%, rgba(255, 255, 255, 0.02));
+  --calma-control-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.06), 0 18px 48px rgba(0, 0, 0, 0.3);
+  --calma-panel-max-height: calc(100vh - 216px);
+  --encore-body-font-stack: "Segoe UI Variable Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --encore-title-font-stack: "Segoe UI Variable Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+::selection {
+  background: color-mix(in srgb, var(--spice-button) 30%, transparent);
+  color: var(--spice-text);
+}
+input, textarea { caret-color: var(--spice-button); }
+.calma-library-toggle:focus-visible,
+.calma-settings :is(button, input, select, a):focus-visible {
+  outline: 2px solid var(--spice-button);
+  outline-offset: 3px;
+}
+.calma-settings { display: grid; gap: 20px; padding: 6px 2px; }
+.GenericModal:has(.calma-settings), [role="dialog"]:has(.calma-settings) {
+  background: var(--calma-control-sheen), var(--calma-control-surface) !important;
+  border-radius: 16px;
+  box-shadow: var(--calma-control-shadow);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+.calma-setting { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.calma-setting > span { display: grid; gap: 5px; min-width: 0; }
+.calma-setting small { display: block; color: var(--spice-subtext); font-size: 13px; line-height: 1.5; }
+.calma-setting > small { max-width: 28ch; overflow-wrap: anywhere; }
+.calma-setting input[type="checkbox"] { width: 20px; height: 20px; flex: 0 0 20px; accent-color: var(--spice-button); cursor: pointer; }
+.calma-settings :is(select, button) {
+  color: var(--spice-text);
+  background: color-mix(in srgb, var(--spice-main-elevated) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--spice-text) 20%, transparent);
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 7px 10px;
+  font: inherit;
+}
+.calma-settings button { cursor: pointer; transition: opacity 130ms var(--calma-motion-ease); }
+.calma-settings button:hover { opacity: 0.82; }
+.calma-settings button:disabled { opacity: 0.4; cursor: default; }
+.calma-settings-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 4px; }
+.calma-settings-footer a { color: var(--spice-subtext); font-size: 13px; text-underline-offset: 3px; }
+@container calma-home (max-width: 580px) {
+  :root [data-testid="home-page"] .view-homeShortcutsGrid-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@container calma-home (max-width: 320px) {
+  :root [data-testid="home-page"] .view-homeShortcutsGrid-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-calma-motion]) :is(.view-homeShortcutsGrid-draggable,
+    .main-entityHeader-headerText, .main-entityHeader-image, .main-actionBar-ActionBar) {
+    animation: none !important;
+  }
+}
+.Root__globalNav, .Root__nav-bar, .Root__right-sidebar, .main-nowPlayingBar-container,
+.main-topBar-background, .main-topBar-overlay,
+.progress-bar__bg, .progress-bar__fg {
+  transition: background-color var(--calma-tint-duration, 220ms) var(--calma-color-ease), color var(--calma-tint-duration, 220ms) var(--calma-color-ease);
+}
+/* Fade static background layers without moving the viewport. */
+.Root__top-container, .Root__main-view {
+  isolation: isolate;
+  transition: none;
+}
+.Root__top-container {
+  box-sizing: border-box;
+  padding-top: 28px !important;
+  --right-sidebar-width: 0 !important;
+  grid-template-columns: auto minmax(0, 1fr) 0 !important;
+}
+.Root__right-sidebar {
+  display: none !important;
+}
+.Root__main-view {
+  --calma-wash-strength: 14%;
+  --calma-echo-strength: 0%;
+  --calma-base-shade: 62%;
+  --calma-base-coverage: 88%;
+  background: transparent !important;
+}
+.Root__main-view.calma-album-view {
+  --calma-wash-strength: 14%;
+  --calma-echo-strength: 6%;
+  --calma-base-coverage: 96%;
+  --text-subdued: var(--spice-subtext);
+}
+.Root__main-view.calma-album-view .main-entityHeader-image {
+  box-shadow: 0 20px 48px color-mix(in srgb, var(--calma-album-tone) 30%, transparent), 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+:is(.Root__top-container, .Root__main-view)::before,
+:is(.Root__top-container, .Root__main-view)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 18% 0%, color-mix(in srgb, var(--calma-wash-from, #b8d8c4) var(--calma-wash-strength, 35%), transparent), transparent 80%), radial-gradient(ellipse at 94% 100%, color-mix(in srgb, var(--calma-echo-from, #b8d8c4) var(--calma-echo-strength, 20%), transparent), transparent 70%), color-mix(in srgb, color-mix(in srgb, var(--calma-wash-base-from, var(--spice-main)) var(--calma-base-shade, 86%), black) var(--calma-base-coverage, 100%), transparent);
+}
+:is(.Root__top-container, .Root__main-view)::after {
+  background: radial-gradient(ellipse at 18% 0%, color-mix(in srgb, var(--calma-wash-to, #b8d8c4) var(--calma-wash-strength, 35%), transparent), transparent 80%), radial-gradient(ellipse at 94% 100%, color-mix(in srgb, var(--calma-echo-to, #b8d8c4) var(--calma-echo-strength, 20%), transparent), transparent 70%), color-mix(in srgb, color-mix(in srgb, var(--calma-wash-base-to, var(--spice-main)) var(--calma-base-shade, 86%), black) var(--calma-base-coverage, 100%), transparent);
+  animation: var(--calma-wash-run, none) var(--calma-tint-duration, 220ms) var(--calma-color-ease) both;
+}
+@keyframes calma-wash-a { from { opacity: 0; } to { opacity: 1; } }
+@keyframes calma-wash-b { from { opacity: 0; } to { opacity: 1; } }
+/* Compensate Spotify's native caption tint without replacing its window buttons. */
+:root[data-calma-platform="win"].spotify__container--is-desktop:not(.fullscreen) body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: calc(135px / (var(--zoom-level, 100) / 100));
+  height: calc(64px / (var(--zoom-level, 100) / 100));
+  z-index: 999;
+  pointer-events: none;
+  backdrop-filter: brightness(2.12);
+}
+body, button, input, textarea, [class*="encore-text"] {
+  font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif !important;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 {
+  font-family: var(--encore-title-font-stack) !important;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.main-topBar-background,
+.main-topBar-overlay {
+  background: color-mix(in srgb, var(--spice-main) 86%, black) !important;
+  background-image: none !important;
+}
+.Root__globalNav {
+  z-index: 100 !important;
+  overflow: visible;
+  background: var(--calma-control-sheen), var(--calma-control-surface) !important;
+  border-radius: 14px;
+  box-sizing: border-box;
+  width: min(800px, calc(100% - 280px));
+  min-width: 0;
+  margin-inline: auto;
+  justify-self: center;
+  justify-content: center;
+  gap: 16px;
+}
+.Root__globalNav .main-globalNav-searchInputContainer {
+  width: clamp(180px, 40vw, 420px) !important;
+  min-width: 0;
+  max-width: 100%;
+}
+.Root__globalNav .main-topBar-searchBar {
+  padding-inline-end: 48px !important;
+}
+/* shortcut: these native search classes match this Spotify build; update if its markup changes. */
+.Root__globalNav .qGPO5O89umT0jc_uov5X {
+  margin-top: 16px;
+}
+.Root__globalNav .ATzSlFakPhgCcp6m2wgQ {
+  margin-block: 0 16px;
+  padding: 16px 12px;
+  max-height: min(398px, calc(100vh - 240px));
+}
+@media (min-height: 1200px) {
+  .Root__globalNav .ATzSlFakPhgCcp6m2wgQ {
+    max-height: min(590px, calc(100vh - 240px));
+  }
+}
+html.calma-search-page .Root__main-view {
+  margin-block: 24px;
+  height: calc(100% - 48px) !important;
+  min-height: 0;
+}
+.Root__globalNav .main-globalNav-searchSection {
+  position: static;
+  flex: 0 1 520px;
+  width: auto;
+  min-width: 0;
+}
+.Root__globalNav .main-globalNav-searchContainer {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+.Root__globalNav .main-globalNav-contentRight {
+  display: none !important;
+}
+.Root__globalNav .main-globalNav-historyButtonsContainer {
+  position: relative;
+  flex: 0 0 80px;
+  min-width: 80px;
+  height: 48px;
+}
+.Root__globalNav .main-globalNav-historyButtonsWrapper {
+  position: static;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+.Root__globalNav .main-globalNav-historyButtons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.Root__globalNav, .Root__right-sidebar, .main-nowPlayingBar-container {
+  backdrop-filter: blur(12px) saturate(150%);
+}
+.Root__main-view, .Root__right-sidebar {
+  box-shadow: var(--calma-glass-shadow);
+}
+.Root__globalNav, .main-nowPlayingBar-container { box-shadow: var(--calma-control-shadow); }
+.Root__main-view,
+.Root__right-sidebar {
+  border-radius: 14px;
+}
+.Root__right-sidebar {
+  background-color: color-mix(in srgb, color-mix(in srgb, var(--spice-sidebar) 72%, black) 88%, transparent) !important;
+}
+.Root__nav-bar,
+.Root__nav-bar :is(.main-yourLibraryX-library, .main-yourLibraryX-libraryContainer,
+  .main-yourLibraryX-libraryRootlist, .main-yourLibraryX-header, .main-yourLibraryX-headerContainer,
+  [data-overlayscrollbars-viewport]) {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.Root__nav-bar {
+  border: 0;
+  border-radius: 0;
+}
+.Root__right-sidebar :is(.Root__right-sidebar-peek, .main-nowPlayingView-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"]) {
+  background-color: transparent !important;
+}
+.main-view-container__scroll-node {
+  background: transparent;
+}
+.main-home-homeHeader,
+.main-home-homeHeader::before,
+.main-home-homeHeader::after {
+  background: none !important;
+}
+.main-card-card {
+  background: transparent;
+  border-radius: 14px;
+  box-shadow: none;
+  transition: background-color 160ms ease-out;
+}
+.main-card-card:hover,
+.main-trackList-trackListRow:hover {
+  background-color: var(--spice-card) !important;
+}
+.main-card-imageContainer,
+.main-coverSlotCollapsed-container .cover-art-image,
+.main-entityHeader-image {
+  border-radius: 12px;
+}
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] :is(.main-nowPlayingWidget-coverArt, img) {
+  border-radius: 0 !important;
+}
+/* shortcut: current classic/v2 BPM-key wrappers; update after player layout renames. */
+.main-nowPlayingBar-container :is(.pUG7cITa0SNpnKHEpv7F, .b_SenSAdcs5efznsmHZd) {
+  display: none !important;
+}
+/* Album extras share a separate content block after the complete track list. */
+[data-testid="album-page"] > .contentSpacing:has([role="grid"]) ~ .contentSpacing,
+body:has([data-testid="album-page"]) .main-view-container__mh-footer-container {
+  display: none !important;
+}
+[data-testid="album-page"] {
+  padding-bottom: 16px !important;
+}
+[data-testid="album-page"] [class*="actionBarBackground-background"] {
+  background: none !important;
+}
+/* Playlist chrome stays quiet; native rows and their virtual scrolling remain intact. */
+body:has([data-testid="playlist-page"]) .Root__main-view {
+  align-self: safe center;
+  margin-block: 24px;
+  height: min(var(--calma-playlist-height, 100%), calc(100% - 48px)) !important;
+  max-height: var(--calma-panel-max-height);
+  min-height: 0;
+  overflow: hidden;
+}
+/* Collection glass: a translucent dark tint with a brighter optical edge. */
+body:has(:is([data-testid="playlist-page"], [data-testid="album-page"])) .Root__main-view {
+  --calma-base-coverage: 76%;
+  --calma-base-shade: 38%;
+  --calma-wash-strength: 8%;
+  --calma-echo-strength: 3%;
+  --text-subdued: var(--spice-subtext);
+  background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.07), transparent 32%, rgba(255, 255, 255, 0.018)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.025), inset 0 -1px 0 rgba(255, 255, 255, 0.07), inset 0 14px 24px rgba(255, 255, 255, 0.025), 0 24px 64px rgba(0, 0, 0, 0.32);
+}
+body:has(:is([data-testid="playlist-page"], [data-testid="album-page"])) .Root__main-view::before {
+  backdrop-filter: none;
+}
+[data-testid="playlist-page"] :is(.playlist-playlist-sectionGrid, .playlist-playlist-findMoreButton) {
+  display: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-container {
+  min-height: 0 !important;
+  height: auto !important;
+  padding-block: 24px 16px !important;
+  overflow: visible !important;
+}
+/* Spotify supplies these colors from each collection's own cover. */
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-backgroundColor {
+  display: block !important;
+  opacity: 1 !important;
+  height: calc(100% + 140px) !important;
+  pointer-events: none;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--background-base-min-contrast, var(--background-base)) 38%, #08090c), color-mix(in srgb, var(--background-base) 38%, #08090c) calc(100% - 140px), transparent) !important;
+}
+/* Mix otherwise fades the cover color into the current playback palette. */
+[data-testid="playlist-page"] .main-entityHeader-backgroundColor::after {
+  display: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) :is(.main-entityHeader-container, .playlist-playlist-playlistContent) {
+  background: transparent !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-contentWrapper {
+  align-items: center !important;
+  gap: 0;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-imageContainer {
+  width: 128px !important;
+  height: 128px !important;
+  flex: 0 0 128px;
+  margin-inline-end: 0 !important;
+  border-radius: 12px;
+  overflow: hidden;
+  outline: 1px solid rgba(255, 255, 255, 0.1);
+  outline-offset: -1px;
+}
+[data-testid="playlist-page"] [data-testid="playlist-image"],
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-imageContainer .main-entityHeader-image {
+  width: 100% !important;
+  height: 100% !important;
+}
+[data-testid="playlist-page"] [data-testid="playlist-image"] {
+  border-radius: 12px;
+  overflow: hidden;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-headerText {
+  min-width: 0;
+  margin-inline-start: 20px;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-title h1 {
+  font-size: clamp(26px, 2.8vw, 36px) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-metaData {
+  --text-subdued: #edf0eb !important;
+  margin-top: 8px;
+  gap: 8px;
+  color: var(--text-subdued);
+  line-height: 1.45;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) :is(.main-entityHeader-metaDataTextSubdued, .main-entityHeader-divider) {
+  color: var(--text-subdued) !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) :is(.main-entityHeader-pretitle, .main-entityHeader-piled, .main-entityHeader-divider),
+[data-testid="playlist-page"] .main-entityHeader-imageContainer > img[src*="lens-flare"],
+[data-testid="playlist-page"] [class*="actionBarBackground-background"],
+body:has([data-testid="playlist-page"]) .main-view-container__mh-footer-container {
+  display: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-actionBar-ActionBar {
+  padding-block: 8px 12px;
+}
+:root:not([data-calma-view-controls="true"]) :is([data-testid="playlist-page"], [data-testid="album-page"]) .main-actionBar-ActionBar .x-sortBox-sortDropdown {
+  display: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-actionBar-ActionBarContainer > .os-scrollbar-vertical {
+  display: none !important;
+}
+/* shortcut: current Spotify release-info class; update if its album footer changes. */
+[data-testid="album-page"] .jTNspexMAmdu4ecUiGwv > div,
+[data-testid="album-page"] .jTNspexMAmdu4ecUiGwv:not(:has(> button)) {
+  display: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) :is(.main-actionBar-ActionBarRow, .main-actionBar-ActionBarRowActions) {
+  column-gap: 12px;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-actionBar-ActionBar .main-playButton-PlayButton [data-encore-id="buttonPrimary"] > span {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px;
+  min-height: 44px;
+}
+[data-testid="playlist-page"] .main-actionBar-ActionBarContainer:has(> [data-overlayscrollbars-viewport] > div > [data-restore-focus-key="assisted_curation"]),
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-actionBar-ActionBarPlayButtonContainer > [aria-hidden="true"] {
+  display: none !important;
+}
+body:has(:is([data-testid="playlist-page"], [data-testid="album-page"])) .Root__main-view .main-playButton-PlayButton [data-encore-id="buttonPrimary"] > span {
+  background: var(--spice-button) !important;
+  color: var(--spice-main) !important;
+  box-shadow: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackList:has([role="columnheader"]) {
+  --grid-template-columns: [index] 16px [first] minmax(0, 1fr) [last] 120px !important;
+}
+/* Cover art provides the play target, so its separate index column can disappear. */
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackList:has([role="columnheader"]):has(.main-trackList-rowImage),
+[data-testid="album-page"] .main-trackList-trackList:has([role="columnheader"]) {
+  --grid-template-columns: [first] minmax(0, 1fr) [last] 120px !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRowGrid {
+  column-gap: 12px;
+  padding-inline: 8px;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRow {
+  position: relative;
+  border-radius: 10px;
+  transition: transform 200ms var(--calma-motion-ease), background-color 120ms ease-out, box-shadow 160ms var(--calma-motion-ease);
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-rowSectionStart {
+  overflow: visible;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackList:has([role="columnheader"]):has(.main-trackList-rowImage) .main-trackList-rowSectionIndex,
+[data-testid="album-page"] .main-trackList-trackList:has([role="columnheader"]) .main-trackList-trackListRow > .main-trackList-rowSectionIndex {
+  position: absolute;
+  grid-column: auto;
+}
+[data-testid="album-page"] .main-trackList-trackList:has([role="columnheader"]):not(:has(.main-trackList-rowImage)) .main-trackList-trackListRow > .main-trackList-rowSectionIndex {
+  inset-inline-start: 8px;
+  inset-block: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+[data-testid="album-page"] .main-trackList-trackList:has([role="columnheader"]):not(:has(.main-trackList-rowImage)) .main-trackList-trackListRow:has(.main-trackList-rowSectionIndex :focus-visible) .main-trackList-rowSectionStart {
+  padding-inline-start: 28px;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackList:has([role="columnheader"]):has(.main-trackList-rowImage) .main-trackList-trackListRow > .main-trackList-rowSectionIndex {
+  inset-inline-start: 8px;
+  top: calc((var(--row-height, 56px) - 40px) / 2);
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 120ms ease-out;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRow > .main-trackList-rowSectionIndex:not(:has(:focus-visible)) {
+  opacity: 0 !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-duration {
+  font-variant-numeric: tabular-nums;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-rowMainContentTitle {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackList:has([role="columnheader"]) .main-trackList-rowSectionVariable {
+  display: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListHeader {
+  border-bottom-color: color-mix(in srgb, var(--spice-text) 8%, transparent);
+  background-color: color-mix(in srgb, var(--spice-main) 88%, transparent) !important;
+  backdrop-filter: blur(16px);
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListHeaderRow {
+  height: 28px;
+  min-height: 28px;
+}
+/* Keep column names available to assistive technology and keyboard sorting. */
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListHeader:not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-number {
+  visibility: hidden !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-rowSectionIndex[role="columnheader"] {
+  color: transparent !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRow:is(:hover, :focus-within) {
+  background-color: color-mix(in srgb, var(--spice-card) 68%, transparent) !important;
+  background-image: linear-gradient(115deg, rgba(255, 255, 255, 0.035), transparent 52%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 1px 0 0 rgba(255, 255, 255, 0.06), 0 3px 16px color-mix(in srgb, var(--spice-button) 14%, transparent), 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRow:hover {
+  transform: scale(1.03);
+  z-index: 2;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-rowAddToPlaylistButton {
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRow:is(:hover, :focus-within) .main-trackList-rowAddToPlaylistButton {
+  opacity: 1;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-rowImage {
+  border-radius: 6px !important;
+}
+@media (max-width: 720px) {
+  :is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-imageContainer {
+    width: 104px !important;
+    height: 104px !important;
+    flex-basis: 104px;
+  }
+  :is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-headerText { margin-inline-start: 16px; }
+}
+.main-nowPlayingBar-container {
+  position: relative;
+  --text-subdued: var(--spice-subtext);
+  background-color: var(--calma-control-surface) !important;
+  background-image: var(--calma-control-sheen);
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: var(--calma-control-shadow);
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  border-radius: 16px;
+}
+.Root__now-playing-bar {
+  height: auto !important;
+  padding: 12px 24px 20px;
+  box-sizing: border-box;
+  background: transparent !important;
+}
+.main-nowPlayingBar-nowPlayingBar {
+  background: transparent !important;
+  padding-inline-end: 44px;
+  box-sizing: border-box;
+}
+.main-playPauseButton-button {
+  background-color: var(--spice-button) !important;
+  color: var(--spice-main) !important;
+}
+.main-playPauseButton-button:hover {
+  background-color: var(--spice-button-active) !important;
+}
+.progress-bar__bg {
+  background-color: var(--spice-button-disabled);
+}
+.progress-bar__fg {
+  background-color: var(--spice-button);
+}
+.main-nowPlayingBar-extraControls button {
+  color: var(--spice-subtext);
+}
+.main-trackList-trackListRow {
+  border-radius: 8px;
+  transition: background-color 120ms ease-out;
+}
+/* Scaling or filtering this container displaces native submenus and their hit targets. */
+.main-contextMenu-menu,
+[role="menu"] {
+  background-color: color-mix(in srgb, color-mix(in srgb, var(--calma-context-tone, var(--spice-main-elevated)) 24%, #06080b) 92%, transparent) !important;
+  background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 42%, rgba(255, 255, 255, 0.012));
+  isolation: isolate;
+  border: 0;
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.06), 0 20px 48px rgba(0, 0, 0, 0.36);
+  opacity: 1;
+  transition: opacity 140ms var(--calma-motion-ease), background-color var(--calma-tint-duration, 220ms) var(--calma-color-ease);
+}
+/* Blur an inert layer so fixed submenus retain their native coordinates. */
+:is(.main-contextMenu-menu, [role="menu"])::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border-radius: inherit;
+  backdrop-filter: blur(12px) saturate(135%);
+  pointer-events: none;
+}
+.main-contextMenu-menuItemButton,
+[role="menu"] [role="menuitem"] {
+  border-radius: 8px;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+.main-contextMenu-menuItemButton:is(:hover, :focus-visible),
+[role="menu"] [role="menuitem"]:is(:hover, :focus-visible) {
+  background-color: color-mix(in srgb, var(--spice-highlight) 72%, transparent) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.main-contextMenu-tippy {
+  border-radius: 8px;
+  box-shadow: none;
+}
+.playback-bar__progress-time,
+[data-testid="playback-position"],
+[data-testid="playback-duration"] {
+  font-variant-numeric: tabular-nums;
+}
+::selection {
+  color: var(--spice-main);
+  background: var(--spice-button);
+}
+input, textarea {
+  caret-color: var(--spice-button);
+}
+:is(a, button, input, textarea, [role="button"]):focus-visible {
+  outline: 2px solid var(--spice-button) !important;
+  outline-offset: 3px;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--spice-button-disabled);
+  border: 2px solid var(--spice-main);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--spice-subtext);
+}
+  :root[data-calma-motion="reduced"] .main-card-card {
+    transition: none;
+  }
+
+
+/* Nine albums or playlists, directly on the application background. */
+body:has([data-testid="home-page"]) .Root__main-view,
+.Root__right-sidebar:has(:is(.ivlyrics-panel-lyrics-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"])) {
+  align-self: safe center;
+  height: fit-content !important;
+  min-height: 0;
+  max-height: var(--calma-panel-max-height);
+  overflow: hidden;
+}
+body:has([data-testid="album-page"]) .Root__main-view {
+  align-self: safe center;
+  height: min(var(--calma-album-height, 100%), var(--calma-panel-max-height)) !important;
+  min-height: 0;
+  max-height: var(--calma-panel-max-height);
+  overflow: hidden;
+}
+.Root__main-view:has([data-testid="home-page"]) {
+  --topbar-height: 0px;
+  container-type: inline-size;
+  border-radius: 0;
+  box-shadow: none;
+}
+.Root__main-view:has([data-testid="home-page"])::before,
+.Root__main-view:has([data-testid="home-page"])::after {
+  content: none;
+}
+.Root__right-sidebar:has(:is(.ivlyrics-panel-lyrics-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"])) {
+  align-self: start;
+  margin-block-start: 24px;
+  max-height: calc(var(--calma-panel-max-height) - 24px);
+}
+.Root__main-view:has([data-testid="home-page"]) :is(.main-topBar-container, .main-home-filterChipsContainer, .main-view-container__mh-footer-container) {
+  display: none !important;
+}
+/* Spotify inserts a viewport-height placeholder around the actual panel. */
+.Root__right-sidebar:has(:is(.ivlyrics-panel-lyrics-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"])) :is(
+  [data-testid="NPV_Panel_OpenDiv"],
+  .main-nowPlayingView-panel,
+  :is(div, section, aside):has(:is([data-testid="NPV_Panel_OpenDiv"], .main-nowPlayingView-panel))
+) {
+  height: auto !important;
+  min-height: 0 !important;
+}
+body:has([data-testid="home-page"]) .main-view-container {
+  flex: 0 1 auto;
+}
+body:has([data-testid="home-page"]) :is(.main-view-container__scroll-node, .main-view-container__scroll-node-child, .main-nowPlayingView-container) {
+  height: auto !important;
+  min-height: 0 !important;
+}
+.Root__right-sidebar:has(:is(.ivlyrics-panel-lyrics-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"])) .main-nowPlayingView-container {
+  container-type: inline-size;
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: var(--calma-panel-max-height);
+}
+.Root__right-sidebar:has(:is(.ivlyrics-panel-lyrics-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"])) [data-overlayscrollbars~="host"] {
+  flex: 0 1 auto;
+  height: auto !important;
+}
+body:has([data-testid="home-page"]) .main-view-container__scroll-node [data-overlayscrollbars-viewport],
+.Root__right-sidebar:has(:is(.ivlyrics-panel-lyrics-container, .main-nowPlayingView-panel, [data-testid="NPV_Panel_OpenDiv"])) [data-overlayscrollbars-viewport] {
+  height: auto !important;
+  max-height: var(--calma-panel-max-height);
+  overflow-y: auto !important;
+}
+[data-testid="home-page"] {
+  min-height: 0 !important;
+  padding-block: 0 !important;
+}
+[data-testid="home-page"] .main-gridContainer-homepageContent > section:not(.view-homeShortcutsGrid-shortcuts) {
+  display: none !important;
+}
+[data-testid="home-page"] .main-gridContainer-homepageContent {
+  max-width: 800px;
+  margin-inline: auto;
+  padding-block: 64px;
+  overflow: visible;
+  container: calma-home / inline-size;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcuts {
+  margin-bottom: 0;
+  overflow: visible;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  overflow: visible;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-playingEqualizer {
+  display: none !important;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut:not(.calma-home-album) {
+  display: none !important;
+}
+/* Keep accessory actions out of the header. */
+.Root__globalNav :is(
+  [aria-label="ivLyrics" i],
+  [aria-label="Biblioteca" i],
+  .calma-library-toggle,
+  .main-userWidget-box,
+  .main-globalNav-buddyFeed,
+  .main-topBar-buddyFeed,
+  [data-testid^="user-widget"],
+  [aria-label*="marketplace" i],
+  [aria-label*="friend" i],
+  [aria-label="Listening activity" i],
+  [aria-label*="amigos" i],
+  a[href="/marketplace"],
+  [data-id="/marketplace"],
+  .main-globalNav-browseButtonWrapper,
+  button[aria-label="Friend Activity" i],
+  button[aria-label="What's New" i],
+  button[aria-label="Notifications" i]
+) {
+  display: none !important;
+}
+.main-nowPlayingBar-extraControls {
+  opacity: 0;
+  pointer-events: none;
+}
+.main-nowPlayingBar-container:is(:hover, :focus-within) .main-nowPlayingBar-extraControls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* One rounded clip per cover; light can extend outside the card. */
+[data-testid="home-page"] .view-homeShortcutsGrid-grid {
+  width: 100%;
+  max-width: 780px;
+  margin-inline: auto;
+  grid-template-rows: none !important;
+  grid-auto-rows: auto !important;
+  gap: 20px !important;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut {
+  --calma-cover-radius: 14px;
+  position: relative;
+  isolation: isolate;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0;
+  aspect-ratio: 1;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: var(--calma-cover-radius) !important;
+  background: transparent !important;
+  background-clip: padding-box;
+  overflow: visible;
+  box-shadow: none;
+  opacity: 1;
+  transition: transform 180ms var(--calma-motion-ease), opacity 150ms ease-out;
+}
+@starting-style {
+  .main-contextMenu-menu,
+  [role="menu"] { opacity: 0.85; }
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: transparent;
+  box-shadow: 0 0 28px 8px color-mix(in srgb, var(--calma-cover-tone, #b8d8c4) 64%, transparent);
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-draggable {
+  position: relative;
+  display: block !important;
+  width: 100%;
+  height: 100% !important;
+  border-radius: var(--calma-cover-radius) !important;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+[data-testid="home-page"] .calma-home-album .view-homeShortcutsGrid-draggable {
+  animation: calma-home-in 280ms var(--calma-motion-ease) backwards;
+  animation-delay: calc(var(--calma-home-index, 0) * 30ms);
+}
+@keyframes calma-home-in {
+  from { opacity: 0.35; transform: translate3d(0, 12px, 0) scale(0.975); }
+  to { opacity: 1; transform: translateZ(0); }
+}
+@keyframes calma-home-fade {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-imageHolder {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100% !important;
+  min-width: 0;
+  height: 100% !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: transparent !important;
+}
+[data-testid="home-page"] :is(
+  .view-homeShortcutsGrid-imageContainer,
+  .view-homeShortcutsGrid-imageWrapper,
+  .view-homeShortcutsGrid-image
+) {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-main {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transform: translateZ(0);
+  height: auto !important;
+  min-height: 0;
+  display: block !important;
+  padding: 0 !important;
+  align-items: flex-end;
+  background: transparent;
+  border-radius: 0 !important;
+  pointer-events: none;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcutLink {
+  border-radius: inherit !important;
+  pointer-events: none !important;
+}
+[data-testid="home-page"] a.view-homeShortcutsGrid-imageHolder,
+[data-testid="home-page"] .view-homeShortcutsGrid-main button {
+  pointer-events: auto !important;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut :focus-visible {
+  outline-offset: -4px;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible)) {
+  z-index: 3;
+  transform: scale(1.018) !important;
+  transition-duration: 220ms, 150ms;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut:active {
+  transform: scale(1.004) !important;
+  transition-duration: 90ms, 150ms;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible))::before {
+  opacity: 1;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut.calma-previewing::after {
+  content: "";
+  display: block;
+  opacity: 1;
+  position: absolute;
+  z-index: 4;
+  left: 16px;
+  right: 16px;
+  bottom: 10px;
+  height: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--calma-cover-tone, #b8d8c4) 65%, white);
+  pointer-events: none;
+  transform-origin: left;
+  animation: calma-preview-progress 6s linear;
+}
+@keyframes calma-preview-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes calma-entity-in {
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes calma-art-in {
+  from { opacity: 0.5; transform: translate3d(0, 8px, 0) scale(0.975); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes calma-detail-in {
+  from { opacity: 0.65; }
+  to { opacity: 1; }
+}
+.Root__main-view .main-entityHeader-headerText {
+  animation: calma-entity-in 220ms var(--calma-open-ease) backwards;
+}
+.Root__main-view .main-entityHeader-image {
+  animation: calma-art-in 240ms var(--calma-open-ease) backwards;
+}
+img.calma-artwork-flight {
+  position: fixed;
+  z-index: 2147483000;
+  max-width: none !important;
+  margin: 0;
+  border: 0;
+  object-fit: cover;
+  transform-origin: top left;
+  pointer-events: none;
+}
+[data-calma-artwork-flight] :is(.main-entityHeader-image, .view-homeShortcutsGrid-draggable) {
+  animation: none !important;
+}
+:is([data-testid="playlist-page"], [data-testid="album-page"]) .calma-current-track:not(:hover):not(:focus-within) {
+  background-color: color-mix(in srgb, var(--spice-button) 7%, transparent) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+.calma-current-track .main-trackList-rowMainContentTitle {
+  color: var(--spice-text) !important;
+}
+.main-playPauseButton-button svg {
+  transition: opacity 150ms var(--calma-motion-ease), transform 130ms var(--calma-motion-ease);
+}
+:root[data-calma-playback="paused"] .main-playPauseButton-button svg { opacity: 0.82; }
+.main-playPauseButton-button:active svg { transform: scale(0.88); }
+:is([data-testid="control-button-shuffle"], [data-testid="control-button-repeat"],
+  [data-testid="control-button-skip-forward"], [data-testid="control-button-skip-back"],
+  .main-actionBar-ActionBar .main-playButton-PlayButton button) {
+  transition: transform 130ms var(--calma-motion-ease), opacity 150ms var(--calma-motion-ease);
+}
+:is([data-testid="control-button-shuffle"], [data-testid="control-button-repeat"],
+  [data-testid="control-button-skip-forward"], [data-testid="control-button-skip-back"],
+  .main-actionBar-ActionBar .main-playButton-PlayButton button):active { transform: scale(0.94); }
+[role="tooltip"] { transition: opacity 150ms var(--calma-motion-ease); }
+@starting-style { [role="tooltip"] { opacity: 0; } }
+@media (hover: hover) and (pointer: fine) {
+  :is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-imageContainer {
+    transition: transform 180ms var(--calma-motion-ease);
+  }
+  :is([data-testid="playlist-page"], [data-testid="album-page"]) .main-entityHeader-imageContainer:hover {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+  :root[data-calma-motion="reduced"] :is(.main-playPauseButton-button:active svg,
+    [data-testid="control-button-shuffle"]:active, [data-testid="control-button-repeat"]:active,
+    [data-testid="control-button-skip-forward"]:active, [data-testid="control-button-skip-back"]:active,
+    .main-actionBar-ActionBar .main-playButton-PlayButton button:active,
+    .main-entityHeader-imageContainer:hover) { transform: none; }
+
+.Root__main-view .main-actionBar-ActionBar {
+  animation: calma-detail-in 220ms var(--calma-open-ease) backwards;
+}
+[role="dialog"] {
+  transition: opacity 180ms var(--calma-motion-ease);
+}
+@starting-style {
+  [role="dialog"] { opacity: 0.88; }
+}
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .calma-home-album .view-homeShortcutsGrid-draggable {
+    animation: calma-home-fade 150ms var(--calma-motion-ease);
+  }
+  :root[data-calma-motion="reduced"] .Root__main-view :is(.main-entityHeader-container, .main-entityHeader-headerText, .main-entityHeader-image, .main-actionBar-ActionBar, .main-trackList-trackList) {
+    animation: calma-home-fade 150ms ease-out;
+  }
+  :root[data-calma-motion="reduced"] [role="dialog"] {
+    animation: none;
+  }
+  :root[data-calma-motion="reduced"] :is([data-testid="playlist-page"], [data-testid="album-page"]) .main-trackList-trackListRow {
+    transform: none;
+    transition: none;
+  }
+  :root[data-calma-motion="reduced"] :is(.main-contextMenu-menu, [role="menu"]) {
+    transition: opacity 140ms ease-out;
+  }
+
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .view-homeShortcutsGrid-shortcut.calma-previewing::after { animation: none; }
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible)) {
+    transform: scale(1.015) !important;
+    transition: none !important;
+  }
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] :is(.view-homeShortcutsGrid-shortcut, .view-homeShortcutsGrid-image) {
+    transition: none;
+    transform: none !important;
+    animation: none !important;
+  }
+
+
+/* A quiet library shortcut beside the player controls. */
+.calma-library-toggle {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 1;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 28px !important;
+  min-width: 28px;
+  height: 28px !important;
+  flex: 0 0 auto;
+  padding: 0 !important;
+  border: 0;
+  border-radius: 8px !important;
+  color: var(--spice-subtext);
+  background-color: transparent !important;
+  opacity: 0.6;
+}
+.calma-library-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+.calma-library-toggle:is(:hover, :focus-visible, [aria-pressed="true"]) {
+  opacity: 1;
+  background-color: var(--spice-highlight) !important;
+}
+
+.Root__globalNav :is(
+  [aria-label*="full app display" i],
+  [aria-label*="immersive" i],
+  [title*="immersive" i],
+  [title="Full App Display"],
+  .spicetify-topbar-button:has([aria-label*="full app display" i])
+) {
+  display: none !important;
+}
+
+/* The library remains one click away from the playbar. */
+body:not(.calma-library-open) .Root__nav-bar {
+  display: none !important;
+}
+body:not(.calma-library-open) .Root__top-container {
+  --left-sidebar-width: 0 !important;
+  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
+}
+
+.Root__globalNav button,
+.main-nowPlayingBar-container button {
+  transition: color 140ms ease-out, background-color 140ms ease-out, opacity 140ms ease-out, transform 160ms var(--calma-motion-ease);
+}
+.Root__globalNav button:active,
+.main-nowPlayingBar-container button:active {
+  transform: scale(0.95);
+}
+.main-nowPlayingBar-extraControls,
+.main-globalNav-browseButtonWrapper {
+  transition: opacity 180ms ease-out;
+}
+  :root[data-calma-motion="reduced"] .Root__globalNav button:active,
+  :root[data-calma-motion="reduced"] .main-nowPlayingBar-container button:active { transform: none; }
+
+
+/* Hide only cards identified inside the right-hand info area. */
+.Root__right-sidebar .ivlyrics-panel-lyrics-container .ivlyrics-panel-lyrics-section {
+  aspect-ratio: auto !important;
+  height: clamp(224px, 26vh, 320px) !important;
+  padding: 24px 20px 20px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 60%), rgba(0, 0, 0, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: none !important;
+}
+.Root__right-sidebar .ivlyrics-panel-lyrics-container .ivlyrics-panel-lyrics-section::before {
+  background: transparent !important;
+}
+.Root__right-sidebar .ivlyrics-panel-header {
+  top: 10px !important;
+  left: 20px !important;
+  right: 20px !important;
+  opacity: 0.5;
+}
+.Root__right-sidebar .ivlyrics-panel-line:not(.active) {
+  opacity: 0.64 !important;
+}
+.Root__right-sidebar .ivlyrics-panel-line.active {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsContainer:not(.fullscreen-active) {
+  border-radius: 16px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.035), transparent 48%), color-mix(in srgb, var(--spice-main) 86%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsBackground {
+  opacity: 0.55;
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsContainer {
+  --lyrics-color-inactive: rgba(255, 255, 255, 0.48);
+  --iv-lyrics-centering-ease: var(--calma-open-ease);
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsContainer.fullscreen-active {
+  transition-property: background-color, opacity !important;
+}
+body.ivlyrics-page-active #ivLyrics-gradient-background {
+  contain: layout paint style;
+  isolation: isolate;
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsLine > p:first-child {
+  font-family: var(--encore-title-font-stack) !important;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-SyncedLyrics .lyrics-lyricsContainer-LyricsLine {
+  transition-timing-function: var(--calma-open-ease), ease-out, ease-out;
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsContainer.blur-enabled :is(.lyrics-lyricsContainer-SyncedLyrics, .lyrics-lyricsContainer-SyncedScrollView) .lyrics-lyricsContainer-LyricsLine {
+  filter: none !important;
+}
+body.ivlyrics-page-active .lyrics-lyricsContainer-LyricsLine-active > p:first-child {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.16);
+}
+
+.calma-secondary-info:not(:has(.ivlyrics-panel-lyrics-container)) {
+  display: none !important;
+}
+.calma-secondary-info:has(.ivlyrics-panel-lyrics-container) {
+  padding: 0 !important;
+  background: transparent !important;
+}
+.calma-secondary-info:has(.ivlyrics-panel-lyrics-container) > :not(.ivlyrics-panel-lyrics-container):not(:has(.ivlyrics-panel-lyrics-container)) {
+  display: none !important;
+}
+
+/* Let clicks through the caption background while preserving its native links and play button. */
+[data-testid="home-page"] .view-homeShortcutsGrid-main {
+  pointer-events: none;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-main :is(a, button, [role="button"]) {
+  pointer-events: auto;
+}
+
+
+[data-testid="home-page"] .view-homeShortcutsGrid-PlayButtonContainer {
+  position: absolute !important;
+  inset: auto 16px 16px auto !important;
+  transform: translateY(3px) scale(0.96) !important;
+  transition: transform 180ms var(--calma-motion-ease);
+  margin: 0;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible)) .view-homeShortcutsGrid-PlayButtonContainer {
+  transform: translateY(0) scale(1) !important;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-trailingOverlay {
+  position: static !important;
+  transform: none !important;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut .view-homeShortcutsGrid-trailingOverlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease-out;
+}
+[data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible)) .view-homeShortcutsGrid-trailingOverlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+  :root[data-calma-motion="reduced"] :is(.Root__top-container, .Root__main-view)::before,
+  :root[data-calma-motion="reduced"] :is(.Root__top-container, .Root__main-view)::after {
+    transform: none;
+    transition: none;
+    animation-duration: 180ms;
+  }
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .view-homeShortcutsGrid-shortcut::before,
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible))::before,
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .view-homeShortcutsGrid-PlayButtonContainer,
+  :root[data-calma-motion="reduced"] [data-testid="home-page"] .view-homeShortcutsGrid-shortcut:is(:hover, :has(:focus-visible)) .view-homeShortcutsGrid-PlayButtonContainer {
+    transform: none !important;
+    transition: none !important;
+  }
